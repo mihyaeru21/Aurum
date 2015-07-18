@@ -1,0 +1,20 @@
+PODS:
+  - Aurum (0.1.0)
+  - Nimble (1.0.0)
+  - Quick (0.3.1)
+
+DEPENDENCIES:
+  - Aurum (from `../`)
+  - Nimble
+  - Quick (~> 0.3.1)
+
+EXTERNAL SOURCES:
+  Aurum:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Aurum: 07efc3ee27836573cb1a04c9c7d16ebd49e6d9c2
+  Nimble: 8bee528e5fcc403653076545db562d2b5db7bb87
+  Quick: 824572d3d198d51e52cf4aa722cebf7e59952a35
+
+COCOAPODS: 0.37.2
