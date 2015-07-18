@@ -12,9 +12,9 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		B33A00B9093AB2963F9E4CE9 /* Pods_Aurum_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F101AD812C491700A66DBE7 /* Pods_Aurum_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E81B60E80E8DFC99019A1413 /* Pods_Aurum_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F9945B814034D9AA61457C /* Pods_Aurum_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F108B9701B5AC9D600861065 /* ProductsRequestHandlerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,10 +43,10 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Aurum_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Aurum_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		6813B9B5DD1C469392EF7EC1 /* Pods-Aurum_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aurum_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Aurum_Example/Pods-Aurum_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6F101AD812C491700A66DBE7 /* Pods_Aurum_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aurum_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B06AA261EF60585AAB1C1022 /* Pods-Aurum_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aurum_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Aurum_Tests/Pods-Aurum_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsRequestHandlerSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +135,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -367,7 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				F108B9701B5AC9D600861065 /* ProductsRequestHandlerSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
