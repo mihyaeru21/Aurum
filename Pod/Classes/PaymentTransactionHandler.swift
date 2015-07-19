@@ -10,7 +10,7 @@ import StoreKit
 
 public class PaymentTransactionHandler : NSObject {
     public typealias TransactionHookType = (SKPaymentTransaction, NSString?) -> ()
-    public typealias VerifyHookType      = (PaymentTransactionHandler, SKPaymentTransaction) -> ()
+    public typealias VerifyHookType      = (PaymentTransactionHandler, SKPaymentTransaction, NSString) -> ()
 
     public var onSuccess  : TransactionHookType?
     public var onRestored : TransactionHookType?
@@ -44,6 +44,23 @@ public class PaymentTransactionHandler : NSObject {
         queue.addPayment(SKPayment(product: product))
     }
 
+    public func fix(
+        onSuccess:  TransactionHookType? = nil,
+        onRestored: TransactionHookType? = nil,
+        onFailure:  TransactionHookType? = nil,
+        onCanceled: TransactionHookType? = nil,
+        verify:     VerifyHookType?      = nil
+    ) {
+        if (onSuccess  != nil) { self.onSuccess  = onSuccess  }
+        if (onRestored != nil) { self.onRestored = onRestored }
+        if (onFailure  != nil) { self.onFailure  = onFailure  }
+        if (onCanceled != nil) { self.onCanceled = onCanceled }
+        if (verify     != nil) { self.verify     = verify     }
+
+        let queue = SKPaymentQueue.defaultQueue()
+        queue.addTransactionObserver(self)
+    }
+
     public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, message: NSString? = nil) {
         if isSuccess {
             if transaction.transactionState == SKPaymentTransactionState.Restored, let restore = self.onRestored {
@@ -51,6 +68,7 @@ public class PaymentTransactionHandler : NSObject {
             }
             else if let succeed = self.onSuccess {
                 succeed(transaction, message)
+                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             }
         }
         else {
@@ -73,7 +91,10 @@ extension PaymentTransactionHandler : SKPaymentTransactionObserver {
             case .Restored: fallthrough
             case .Purchased:
                 if let verify = self.verify {
-                    verify(self, transaction)
+                    let url = NSBundle.mainBundle().appStoreReceiptURL
+                    let receipt = NSData.init(contentsOfURL: url!)
+                    let receiptString = receipt!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.init(0))
+                    verify(self, transaction, receiptString)
                 }
                 else {
                     self.finish(transaction: transaction, isSuccess: true, message: "no_verifying")
