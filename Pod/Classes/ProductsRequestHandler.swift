@@ -9,7 +9,7 @@
 import StoreKit
 
 public class ProductsRequestHandler : NSObject {
-    public typealias OnStartedType = (Set<NSString>, SKProductsRequest) -> ()
+    public typealias OnStartedType = (Set<String>, SKProductsRequest) -> ()
     public typealias OnSuccessType = ([SKProduct], [SKProduct]) -> ()
     public typealias OnFailureType = (NSError?) -> ()
 
@@ -28,7 +28,7 @@ public class ProductsRequestHandler : NSObject {
         super.init()
     }
 
-    public func request(#productIds: Set<NSString>) {
+    public func request(#productIds: Set<String>) {
         let request = SKProductsRequest(productIdentifiers: productIds)
         request.delegate = self
         request.start()

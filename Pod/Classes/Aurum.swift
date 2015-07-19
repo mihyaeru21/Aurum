@@ -30,7 +30,7 @@ public class Aurum {
     var requestHandler     : ProductsRequestHandler?
     var transactionHandler : PaymentTransactionHandler?
 
-    public func start(productId: NSString) {
+    public func start(productId: String) {
         weak var weakSelf = self
         self.transactionHandler = PaymentTransactionHandler(
             onSuccess:  { (_, _) in weakSelf?.onSuccess?() },

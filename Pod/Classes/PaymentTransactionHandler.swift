@@ -9,8 +9,8 @@
 import StoreKit
 
 public class PaymentTransactionHandler : NSObject {
-    public typealias TransactionHookType = (SKPaymentTransaction, NSString?) -> ()
-    public typealias VerifyHookType      = (PaymentTransactionHandler, SKPaymentTransaction, NSString) -> ()
+    public typealias TransactionHookType = (SKPaymentTransaction, String?) -> ()
+    public typealias VerifyHookType      = (PaymentTransactionHandler, SKPaymentTransaction, String) -> ()
 
     public var onSuccess  : TransactionHookType?
     public var onRestored : TransactionHookType?
@@ -48,7 +48,7 @@ public class PaymentTransactionHandler : NSObject {
         queue.addTransactionObserver(self)
     }
 
-    public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, message: NSString? = nil) {
+    public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, message: String? = nil) {
         if isSuccess {
             SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             if transaction.transactionState == SKPaymentTransactionState.Restored, let restore = self.onRestored {
