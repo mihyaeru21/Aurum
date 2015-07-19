@@ -78,10 +78,11 @@ extension PaymentTransactionHandler : SKPaymentTransactionObserver {
             case .Restored: fallthrough
             case .Purchased:
                 if let verify = self.verify {
-                    let url = NSBundle.mainBundle().appStoreReceiptURL
-                    let receipt = NSData.init(contentsOfURL: url!)
-                    let receiptString = receipt!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.init(0))
-                    verify(self, transaction, receiptString)
+                    if let url = NSBundle.mainBundle().appStoreReceiptURL, let receiptData = NSData.init(contentsOfURL: url) {
+                       let receipt = receiptData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.init(0))
+                        verify(self, transaction, receipt)
+                    }
+                    // FIXME: レシートが無いのはおかしい
                 }
                 else {
                     self.finish(transaction: transaction, isSuccess: true, message: "no_verifying")
