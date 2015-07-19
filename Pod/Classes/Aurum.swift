@@ -15,7 +15,7 @@ public class Aurum {
     public typealias OnStartedType  = ProductsRequestHandler.OnStartedType
     public typealias OnSuccessType  = () -> ()
     public typealias OnRestoredType = () -> ()
-    public typealias OnFailureType  = (NSError) -> ()
+    public typealias OnFailureType  = (NSError?) -> ()
     public typealias OnCanceledType = () -> ()
     public typealias OnTimeoutType  = () -> ()
 
@@ -46,8 +46,8 @@ public class Aurum {
                 let product = products[0]            // FIXME: ひとまず1個だけ対応
                 weakSelf?.transactionHandler?.purchase(product: product)
             },
-            onFailure: {
-                error in weakSelf?.onFailure?(error)
+            onFailure: { error in
+                weakSelf?.onFailure?(error)
             }
         )
         self.requestHandler?.request(productIds: Set([productId]))

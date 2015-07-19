@@ -11,7 +11,7 @@ import StoreKit
 public class ProductsRequestHandler : NSObject {
     public typealias OnStartedType = (Set<NSString>, SKProductsRequest) -> ()
     public typealias OnSuccessType = ([SKProduct], [SKProduct]) -> ()
-    public typealias OnFailureType = (NSError) -> ()
+    public typealias OnFailureType = (NSError?) -> ()
 
     public var onStarted : OnStartedType?
     public var onSuccess : OnSuccessType?
