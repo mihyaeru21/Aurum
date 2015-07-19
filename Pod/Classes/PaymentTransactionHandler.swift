@@ -63,12 +63,12 @@ public class PaymentTransactionHandler : NSObject {
 
     public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, message: NSString? = nil) {
         if isSuccess {
+            SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             if transaction.transactionState == SKPaymentTransactionState.Restored, let restore = self.onRestored {
                 restore(transaction, message)
             }
             else if let succeed = self.onSuccess {
                 succeed(transaction, message)
-                SKPaymentQueue.defaultQueue().finishTransaction(transaction)
             }
         }
         else {

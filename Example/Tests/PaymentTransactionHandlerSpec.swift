@@ -14,10 +14,12 @@ import Aurum
 private var dummyAddObserver    : () -> () = {}
 private var dummyRemoveObserver : () -> () = {}
 private var dummyAddPayment     : () -> () = {}
+private var dummyFinish         : () -> () = {}
 class DummyQueue : SKPaymentQueue {
     override func addTransactionObserver(observer: SKPaymentTransactionObserver!) { dummyAddObserver() }
     override func removeTransactionObserver(observer: SKPaymentTransactionObserver!) { dummyRemoveObserver() }
     override func addPayment(payment: SKPayment!) { dummyAddPayment() }
+    override func finishTransaction(transaction: SKPaymentTransaction!) { dummyFinish() }
 }
 
 class DummyTransaction: SKPaymentTransaction {
@@ -30,7 +32,7 @@ class DummyTransaction: SKPaymentTransaction {
 
 class PaymentTransactionHandlerSpec: QuickSpec {
     override func spec() {
-        // singletonはoverrideして、先にインスタンスを作っちゃえばsuperに勝てる
+        // singletonは、overrideして先にインスタンスを作っちゃえばsuperに勝てる
         DummyQueue.defaultQueue()
         let handler = PaymentTransactionHandler()
 
@@ -54,6 +56,14 @@ class PaymentTransactionHandlerSpec: QuickSpec {
             let transaction = DummyTransaction()
 
             context("when state is success") {
+                it("calls SKPaymentQueue#finish") {
+                    var called = 0
+                    transaction.state = SKPaymentTransactionState.Purchased
+                    dummyFinish = { called++ }
+                    handler.finish(transaction: transaction, isSuccess: true, message: nil)
+                    expect(called) == 1
+                }
+
                 it("sets willFinish to true") {
                     transaction.state = SKPaymentTransactionState.Purchased
                     handler.finish(transaction: transaction, isSuccess: true, message: nil)
@@ -87,6 +97,15 @@ class PaymentTransactionHandlerSpec: QuickSpec {
             }
 
             context("when state is failure") {
+                it("doesn't call SKPaymentQueue#finish") {
+                    var called = 0
+                    transaction.state = SKPaymentTransactionState.Failed
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentInvalid, userInfo: nil)
+                    dummyFinish = { called++ }
+                    handler.finish(transaction: transaction, isSuccess: false, message: nil)
+                    expect(called) == 0
+                }
+
                 it("sets willFinish to true") {
                     transaction.state = SKPaymentTransactionState.Failed
                     transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentCancelled, userInfo: nil)
