@@ -25,6 +25,7 @@ class DummyResponse: SKProductsResponse {
     }
 }
 
+
 class ProductsRequestHandlerSpec: QuickSpec {
     override func spec() {
         let handler = ProductsRequestHandler()

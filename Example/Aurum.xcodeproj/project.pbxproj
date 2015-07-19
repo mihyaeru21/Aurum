@@ -15,6 +15,7 @@
 		B33A00B9093AB2963F9E4CE9 /* Pods_Aurum_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F101AD812C491700A66DBE7 /* Pods_Aurum_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E81B60E80E8DFC99019A1413 /* Pods_Aurum_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F9945B814034D9AA61457C /* Pods_Aurum_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F108B9701B5AC9D600861065 /* ProductsRequestHandlerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */; };
+		F108B9751B5B3ED400861065 /* PaymentTransactionHandlerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F108B9741B5B3ED400861065 /* PaymentTransactionHandlerSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		6F101AD812C491700A66DBE7 /* Pods_Aurum_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aurum_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B06AA261EF60585AAB1C1022 /* Pods-Aurum_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aurum_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Aurum_Tests/Pods-Aurum_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsRequestHandlerSpec.swift; sourceTree = "<group>"; };
+		F108B9741B5B3ED400861065 /* PaymentTransactionHandlerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionHandlerSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,8 +137,9 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				F108B96E1B5AC9D600861065 /* ProductsRequestHandlerSpec.swift */,
+				F108B9741B5B3ED400861065 /* PaymentTransactionHandlerSpec.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F108B9701B5AC9D600861065 /* ProductsRequestHandlerSpec.swift in Sources */,
+				F108B9751B5B3ED400861065 /* PaymentTransactionHandlerSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
