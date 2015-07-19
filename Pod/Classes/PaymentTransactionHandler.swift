@@ -20,13 +20,7 @@ public class PaymentTransactionHandler : NSObject {
 
     public var willFinish : Bool
 
-    public override init() {
-        self.willFinish = false
-        super.init()
-    }
-
-    public func purchase(
-        #product: SKProduct,
+    public init(
         onSuccess:  TransactionHookType? = nil,
         onRestored: TransactionHookType? = nil,
         onFailure:  TransactionHookType? = nil,
@@ -39,24 +33,17 @@ public class PaymentTransactionHandler : NSObject {
         if (onCanceled != nil) { self.onCanceled = onCanceled }
         if (verify     != nil) { self.verify     = verify     }
 
+        self.willFinish = false
+        super.init()
+    }
+
+    public func purchase(#product: SKProduct) {
         let queue = SKPaymentQueue.defaultQueue()
         queue.addTransactionObserver(self)
         queue.addPayment(SKPayment(product: product))
     }
 
-    public func fix(
-        onSuccess:  TransactionHookType? = nil,
-        onRestored: TransactionHookType? = nil,
-        onFailure:  TransactionHookType? = nil,
-        onCanceled: TransactionHookType? = nil,
-        verify:     VerifyHookType?      = nil
-    ) {
-        if (onSuccess  != nil) { self.onSuccess  = onSuccess  }
-        if (onRestored != nil) { self.onRestored = onRestored }
-        if (onFailure  != nil) { self.onFailure  = onFailure  }
-        if (onCanceled != nil) { self.onCanceled = onCanceled }
-        if (verify     != nil) { self.verify     = verify     }
-
+    public func fix() {
         let queue = SKPaymentQueue.defaultQueue()
         queue.addTransactionObserver(self)
     }

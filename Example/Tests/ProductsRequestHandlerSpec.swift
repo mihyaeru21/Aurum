@@ -40,7 +40,8 @@ class ProductsRequestHandlerSpec: QuickSpec {
 
             it("calls onStarted callback") {
                 var called = 0
-                handler.request(productIds: Set(["hoge_id"]), onStarted: { (_, _) in called++ })
+                handler.onStarted = { (_, _) in called++ }
+                handler.request(productIds: Set(["hoge_id"]))
                 expect(called) == 1
             }
         }

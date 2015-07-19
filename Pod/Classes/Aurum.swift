@@ -23,47 +23,36 @@ public class Aurum {
     var transactionHandler : PaymentTransactionHandler?
 
     public func start(productId: NSString) {
-        self.requestHandler     = ProductsRequestHandler()
-        self.transactionHandler = PaymentTransactionHandler()
-
         weak var weakSelf = self
-        self.requestHandler?.request(productIds: Set([productId]),
-            onSuccess: { (products, invalidIds) in
-                if (invalidIds.count > 0) {
-                    // TODO: hookが欲しい？
-                    return
-                }
 
-                // FIXME: ひとまず1個だけ対応
-                let product = products[0]
-                weakSelf?.transactionHandler?.purchase(
-                    product: product,
-                    onSuccess: { (transaction, message) in
-                        if let succeed = weakSelf?.onSuccess { succeed() }
-                    },
-                    onFailure: { (transaction, message) in
-                        if let fail = weakSelf?.onFailure { fail() }
-                    },
-                    verify: weakSelf?.verify
-                )
-
-            },
-            onFailure: { _ in
-                if let fail = weakSelf?.onFailure { fail() }
-            }
-        )
-    }
-
-    public func fix() {
-        self.transactionHandler = PaymentTransactionHandler()
-        weak var weakSelf = self
-        self.transactionHandler?.fix(
+        self.transactionHandler = PaymentTransactionHandler(
             onSuccess: { (transaction, message) in
                 if let succeed = weakSelf?.onSuccess { succeed() }
             },
             onFailure: { (transaction, message) in
                 if let fail = weakSelf?.onFailure { fail() }
+            },
+            verify: weakSelf?.verify
+        )
+
+        self.requestHandler = ProductsRequestHandler(
+            onSuccess: { (products, invalidIds) in
+                // TODO: hookが欲しい？
+                if (invalidIds.count > 0) { return }
+                // FIXME: ひとまず1個だけ対応
+                let product = products[0]
+                weakSelf?.transactionHandler?.purchase(product: product)
+            },
+            onFailure: { _ in
+                if let fail = weakSelf?.onFailure { fail() }
             }
         )
+
+        self.requestHandler?.request(productIds: Set([productId]))
+    }
+
+    public func fix() {
+        self.transactionHandler = PaymentTransactionHandler()
+        self.transactionHandler?.fix()
     }
 }

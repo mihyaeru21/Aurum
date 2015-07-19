@@ -13,27 +13,26 @@ public class ProductsRequestHandler : NSObject {
     public typealias OnSuccessType = ([SKProduct], [SKProduct]) -> ()
     public typealias OnFailureType = (NSError) -> ()
 
+    public var onStarted : OnStartedType?
     public var onSuccess : OnSuccessType?
     public var onFailure : OnFailureType?
 
-    public override init() {
-        super.init()
-    }
-
-    public func request(
-        #productIds: Set<NSString>,
+    public init(
         onStarted: OnStartedType? = nil,
         onSuccess: OnSuccessType? = nil,
         onFailure: OnFailureType? = nil
     ) {
+        if (onStarted != nil) { self.onStarted = onStarted }
         if (onSuccess != nil) { self.onSuccess = onSuccess }
         if (onFailure != nil) { self.onFailure = onFailure }
+        super.init()
+    }
 
+    public func request(#productIds: Set<NSString>) {
         let request = SKProductsRequest(productIdentifiers: productIds)
         request.delegate = self
         request.start()
-
-        onStarted?(productIds, request)
+        self.onStarted?(productIds, request)
     }
 }
 
