@@ -59,7 +59,7 @@ public class PaymentTransactionHandler : NSObject {
             }
         }
         else {
-            if transaction.error.code == SKErrorPaymentCancelled, let cancel = self.onCanceled {
+            if transaction.error?.code == SKErrorPaymentCancelled, let cancel = self.onCanceled {
                 cancel(transaction, message)
             }
             else if let fail = self.onFailure {
