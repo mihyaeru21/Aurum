@@ -26,7 +26,7 @@ public class Aurum {
         self.requestHandler     = ProductsRequestHandler()
         self.transactionHandler = PaymentTransactionHandler()
 
-        weak var weak_self = self
+        weak var weakSelf = self
         self.requestHandler?.request(productIds: Set([productId]),
             onSuccess: { (products, invalidIds) in
                 if (invalidIds.count > 0) {
@@ -36,33 +36,33 @@ public class Aurum {
 
                 // FIXME: ひとまず1個だけ対応
                 let product = products[0]
-                weak_self?.transactionHandler?.purchase(
+                weakSelf?.transactionHandler?.purchase(
                     product: product,
                     onSuccess: { (transaction, message) in
-                        if let succeed = weak_self?.onSuccess { succeed() }
+                        if let succeed = weakSelf?.onSuccess { succeed() }
                     },
                     onFailure: { (transaction, message) in
-                        if let fail = weak_self?.onFailure { fail() }
+                        if let fail = weakSelf?.onFailure { fail() }
                     },
-                    verify: weak_self?.verify
+                    verify: weakSelf?.verify
                 )
 
             },
             onFailure: { _ in
-                if let fail = weak_self?.onFailure { fail() }
+                if let fail = weakSelf?.onFailure { fail() }
             }
         )
     }
 
     public func fix() {
         self.transactionHandler = PaymentTransactionHandler()
-        weak var weak_self = self
+        weak var weakSelf = self
         self.transactionHandler?.fix(
             onSuccess: { (transaction, message) in
-                if let succeed = weak_self?.onSuccess { succeed() }
+                if let succeed = weakSelf?.onSuccess { succeed() }
             },
             onFailure: { (transaction, message) in
-                if let fail = weak_self?.onFailure { fail() }
+                if let fail = weakSelf?.onFailure { fail() }
             }
         )
     }
