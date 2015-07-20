@@ -1,5 +1,5 @@
 PODS:
-  - Aurum (0.1.0)
+  - Aurum (0.0.1)
   - Nimble (1.0.0)
   - Quick (0.3.1)
 
@@ -13,7 +13,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Aurum: 2b16e3499dd4afb202584f5128824e92d349d7a1
+  Aurum: 8603d184c04ac9a38fe6d7bf0d1a4e14fc0056d4
   Nimble: 8bee528e5fcc403653076545db562d2b5db7bb87
   Quick: 824572d3d198d51e52cf4aa722cebf7e59952a35
 

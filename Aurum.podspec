@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Aurum'
-  s.version          = '0.1.0'
+  s.version          = '0.0.1'
   s.summary          = 'A simple ribrary for StoreKit with verifying receipt on server.'
   s.description      = <<-DESC
                        Aurum is a simple library for StoreKit.
