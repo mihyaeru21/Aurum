@@ -12,6 +12,12 @@ public class Aurum {
     public static let sharedInstance = Aurum()
     private init() {}
 
+    // for error
+    public static let ErrorDomain = "com.mihyaeru.Aurum"
+    enum AurumError : Int {
+        case InvalidProductId = 1
+    }
+
     public typealias OnStartedType  = ProductsRequestHandler.OnStartedType
     public typealias OnSuccessType  = () -> ()
     public typealias OnRestoredType = () -> ()
@@ -42,9 +48,14 @@ public class Aurum {
         self.requestHandler = ProductsRequestHandler(
             onStarted: weakSelf?.onStarted,
             onSuccess: { (products, invalidIds) in
-                if (invalidIds.count > 0) { return } // TODO: hookが欲しい？
-                let product = products[0]            // FIXME: ひとまず1個だけ対応
-                weakSelf?.transactionHandler?.purchase(product: product)
+                if (invalidIds.count <= 0) {
+                    let product = products[0]  // FIXME: ひとまず1個だけ対応
+                    weakSelf?.transactionHandler?.purchase(product: product)
+                }
+                else {
+                    let error = NSError(domain: Aurum.ErrorDomain, code: AurumError.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds])
+                    weakSelf?.onFailure?(error)
+                }
             },
             onFailure: { error in
                 weakSelf?.onFailure?(error)
