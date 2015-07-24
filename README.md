@@ -1,6 +1,6 @@
 # Aurum
 
-[![CI Status](http://img.shields.io/travis/mihyaeru21/Aurum.svg?style=flat)](https://travis-ci.org/Mihyaeru/Aurum)
+[![CI Status](http://img.shields.io/travis/mihyaeru21/Aurum.svg?style=flat)](https://travis-ci.org/mihyaeru21/Aurum)
 [![Version](https://img.shields.io/cocoapods/v/Aurum.svg?style=flat)](http://cocoapods.org/pods/Aurum)
 [![License](https://img.shields.io/cocoapods/l/Aurum.svg?style=flat)](http://cocoapods.org/pods/Aurum)
 [![Platform](https://img.shields.io/cocoapods/p/Aurum.svg?style=flat)](http://cocoapods.org/pods/Aurum)
