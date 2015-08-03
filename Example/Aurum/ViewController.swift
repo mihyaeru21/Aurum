@@ -7,18 +7,45 @@
 //
 
 import UIKit
+import Aurum
 
 class ViewController: UIViewController {
+    // replace your product ids
+    private let validProductId1  = "com.mihyaeru.Aurum.item.1"
+    private let validProductId2  = "com.mihyaeru.Aurum.item.2"
+    private let invalidProductId = "com.mihyaeru.Aurum.item.invalid"
+
+    private let aurum = Aurum.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        self.aurum.onStarted  = { (_, _) in println("start") }
+        self.aurum.onFailure  = { error in println("failure with error: \(error)") }
+        self.aurum.onCanceled = { println("cancel") }
+        self.aurum.onTimeout  = { println("timeout") }
+        self.aurum.onSuccess  = { println("success") }
+        self.aurum.verify = { (transactionHandler, transaction, receipt) in
+            println("verify for transaction: \(transaction)")
+            // make success!
+            transactionHandler.finish(transaction: transaction, isSuccess: true)
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func buyValidItem1() {
+        self.aurum.start(self.validProductId1)
     }
 
+    @IBAction func buyValidItem2() {
+        self.aurum.start(self.validProductId2)
+    }
+
+    @IBAction func buyInvalidItem() {
+        self.aurum.start(self.invalidProductId)
+    }
+
+    @IBAction func fix() {
+        self.aurum.fix()
+    }
 }
 

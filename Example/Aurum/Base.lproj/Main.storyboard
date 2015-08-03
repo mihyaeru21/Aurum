@@ -1,22 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Aurum_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmL-5D-KT3">
+                                <rect key="frame" x="107" y="269" width="106" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ttY-7B-Wva"/>
+                                </constraints>
+                                <state key="normal" title="Buy valid item1">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buyValidItem1" destination="vXZ-lx-hvc" eventType="touchUpInside" id="TiC-q5-VXP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1g-7S-gRd">
+                                <rect key="frame" x="107" y="307" width="106" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="MZW-Bb-wgK"/>
+                                </constraints>
+                                <state key="normal" title="Buy valid item2">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buyValidItem2" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3TD-wH-f0R"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1m-7K-SUW">
+                                <rect key="frame" x="106" y="345" width="109" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="HWO-6f-2b6"/>
+                                </constraints>
+                                <state key="normal" title="Buy invalid item">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buyInvalidItem" destination="vXZ-lx-hvc" eventType="touchUpInside" id="jfC-zY-Obe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P97-e2-KYF">
+                                <rect key="frame" x="145" y="383" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="MzM-Lk-xoh"/>
+                                </constraints>
+                                <state key="normal" title="Fix">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="fix" destination="vXZ-lx-hvc" eventType="touchUpInside" id="088-DO-xyl"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="B1g-7S-gRd" secondAttribute="centerX" id="7C4-6j-1Qy"/>
+                            <constraint firstItem="P1m-7K-SUW" firstAttribute="top" secondItem="B1g-7S-gRd" secondAttribute="bottom" constant="8" id="7I3-X5-qIt"/>
+                            <constraint firstAttribute="centerX" secondItem="dmL-5D-KT3" secondAttribute="centerX" id="OAR-yx-j8t"/>
+                            <constraint firstAttribute="centerX" secondItem="P97-e2-KYF" secondAttribute="centerX" id="TtH-DT-f8T"/>
+                            <constraint firstAttribute="centerX" secondItem="P1m-7K-SUW" secondAttribute="centerX" id="hgg-Qt-sAc"/>
+                            <constraint firstAttribute="centerY" secondItem="dmL-5D-KT3" secondAttribute="centerY" id="mKI-dj-e74"/>
+                            <constraint firstItem="B1g-7S-gRd" firstAttribute="top" secondItem="dmL-5D-KT3" secondAttribute="bottom" constant="8" id="pUg-Zt-9Mk"/>
+                            <constraint firstItem="P97-e2-KYF" firstAttribute="top" secondItem="P1m-7K-SUW" secondAttribute="bottom" constant="8" id="tLX-IX-UtI"/>
+                        </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
