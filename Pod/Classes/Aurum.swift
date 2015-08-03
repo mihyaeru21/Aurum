@@ -39,27 +39,26 @@ public class Aurum {
     var transactionHandler : PaymentTransactionHandler?
 
     public func start(productId: String) {
-        weak var weakSelf = self
         self.transactionHandler = PaymentTransactionHandler(
-            onSuccess:  { (_, _) in weakSelf?.onSuccess?() },
-            onRestored: { (_, _) in weakSelf?.onRestored?() },
-            onFailure:  { (transaction, _) in weakSelf?.onFailure?(transaction.error) },
-            onCanceled: { (_, _) in weakSelf?.onCanceled?() },
-            verify: weakSelf?.verify
+            onSuccess:  { [weak self] (_, _) in self?.onSuccess?() },
+            onRestored: { [weak self] (_, _) in self?.onRestored?() },
+            onFailure:  { [weak self] (transaction, _) in self?.onFailure?(transaction.error) },
+            onCanceled: { [weak self] (_, _) in self?.onCanceled?() },
+            verify: self.verify
         )
         self.requestHandler = ProductsRequestHandler(
-            onStarted: weakSelf?.onStarted,
-            onSuccess: { (products, invalidIds) in
+            onStarted: self.onStarted,
+            onSuccess: { [weak self] (products, invalidIds) in
                 if (invalidIds.count <= 0) {
                     let product = products[0]  // FIXME: ひとまず1個だけ対応
-                    weakSelf?.transactionHandler?.purchase(product: product)
+                    self?.transactionHandler?.purchase(product: product)
                 }
                 else {
-                    weakSelf?.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
+                    self?.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
                 }
             },
-            onFailure: { error in
-                weakSelf?.onFailure?(error)
+            onFailure: { [weak self] error in
+                self?.onFailure?(error)
             }
         )
 
@@ -72,13 +71,12 @@ public class Aurum {
     }
 
     public func fix() {
-        weak var weakSelf = self
         self.transactionHandler = PaymentTransactionHandler(
-            onSuccess:  { (_, _) in weakSelf?.onSuccess?() },
-            onRestored: { (_, _) in weakSelf?.onRestored?() },
-            onFailure:  { (transaction, _) in weakSelf?.onFailure?(transaction.error) },
-            onCanceled: { (_, _) in weakSelf?.onCanceled?() },
-            verify: weakSelf?.verify
+            onSuccess:  { [weak self] (_, _) in self?.onSuccess?() },
+            onRestored: { [weak self] (_, _) in self?.onRestored?() },
+            onFailure:  { [weak self] (transaction, _) in self?.onFailure?(transaction.error) },
+            onCanceled: { [weak self] (_, _) in self?.onCanceled?() },
+            verify: self.verify
         )
 
         if SKPaymentQueue.canMakePayments() {
