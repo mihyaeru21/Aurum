@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StoreKit
 
 public class Aurum {
     public static let sharedInstance = Aurum()
@@ -14,8 +15,9 @@ public class Aurum {
 
     // for error
     public static let ErrorDomain = "com.mihyaeru.Aurum"
-    enum AurumError : Int {
-        case InvalidProductId = 1
+    public enum Error : Int {
+        case CannotMakePayments = 1
+        case InvalidProductId   = 2
     }
 
     public typealias OnStartedType  = ProductsRequestHandler.OnStartedType
@@ -53,15 +55,20 @@ public class Aurum {
                     weakSelf?.transactionHandler?.purchase(product: product)
                 }
                 else {
-                    let error = NSError(domain: Aurum.ErrorDomain, code: AurumError.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds])
-                    weakSelf?.onFailure?(error)
+                    weakSelf?.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
                 }
             },
             onFailure: { error in
                 weakSelf?.onFailure?(error)
             }
         )
-        self.requestHandler?.request(productIds: Set([productId]))
+
+        if SKPaymentQueue.canMakePayments() {
+            self.requestHandler?.request(productIds: Set([productId]))
+        }
+        else {
+            self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.CannotMakePayments.rawValue, userInfo:nil))
+        }
     }
 
     public func fix() {
@@ -73,6 +80,12 @@ public class Aurum {
             onCanceled: { (_, _) in weakSelf?.onCanceled?() },
             verify: weakSelf?.verify
         )
-        self.transactionHandler?.fix()
+
+        if SKPaymentQueue.canMakePayments() {
+            self.transactionHandler?.fix()
+        }
+        else {
+            self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.CannotMakePayments.rawValue, userInfo:nil))
+        }
     }
 }
