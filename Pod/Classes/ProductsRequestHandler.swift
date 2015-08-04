@@ -10,7 +10,7 @@ import StoreKit
 
 public class ProductsRequestHandler : NSObject {
     public typealias OnStartedType = (Set<String>, SKProductsRequest) -> ()
-    public typealias OnSuccessType = ([SKProduct], [SKProduct]) -> ()
+    public typealias OnSuccessType = ([SKProduct]) -> ()
     public typealias OnFailureType = (NSError?) -> ()
 
     public var onStarted : OnStartedType?
@@ -38,10 +38,13 @@ public class ProductsRequestHandler : NSObject {
 
 extension ProductsRequestHandler : SKProductsRequestDelegate {
     public func productsRequest(request: SKProductsRequest!, didReceiveResponse response: SKProductsResponse!) {
-        self.onSuccess?(
-            response.products as! [SKProduct],
-            response.invalidProductIdentifiers as! [SKProduct]
-        )
+        let invalidIds = response.invalidProductIdentifiers as! [SKProduct]
+        if (invalidIds.count > 0) {
+            self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Aurum.Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
+        }
+        else {
+            self.onSuccess?(response.products as! [SKProduct])
+        }
     }
 
     public func request(request: SKRequest!, didFailWithError error: NSError!) {

@@ -49,7 +49,7 @@ class ProductsRequestHandlerSpec: QuickSpec {
         describe("productsRequest:didReceiveResponse:") {
             it("calls onSuccess callback") {
                 var called = 0
-                handler.onSuccess = { (_, _) in called++ }
+                handler.onSuccess = { _ in called++ }
                 handler.productsRequest(SKProductsRequest(productIdentifiers: Set([])), didReceiveResponse: DummyResponse())
                 expect(called) == 1
             }

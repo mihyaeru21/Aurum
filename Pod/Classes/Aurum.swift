@@ -52,14 +52,9 @@ public class Aurum {
 
         self.requestHandler.onStarted = { [weak self] (productIds, request) in self?.onStarted?(productIds, request) }
         self.requestHandler.onFailure = { [weak self] (error) in self?.onFailure?(error)                             }
-        self.requestHandler.onSuccess = { [weak self] (products, invalidIds) in
-            if (invalidIds.count <= 0) {
-                let product = products[0]  // FIXME: ひとまず1個だけ対応
-                self?.transactionHandler.purchase(product: product)
-            }
-            else {
-                self?.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
-            }
+        self.requestHandler.onSuccess = { [weak self] (products) in
+            let product = products[0]  // FIXME: ひとまず1個だけ対応
+            self?.transactionHandler.purchase(product: product)
         }
     }
 
