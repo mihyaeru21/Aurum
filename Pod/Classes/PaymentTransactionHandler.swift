@@ -18,8 +18,6 @@ public class PaymentTransactionHandler : NSObject {
     public var onCanceled : TransactionHookType?
     public var verify     : VerifyHookType?
 
-    public var willFinish : Bool
-
     public init(
         onSuccess:  TransactionHookType? = nil,
         onRestored: TransactionHookType? = nil,
@@ -33,7 +31,6 @@ public class PaymentTransactionHandler : NSObject {
         if (onCanceled != nil) { self.onCanceled = onCanceled }
         if (verify     != nil) { self.verify     = verify     }
 
-        self.willFinish = false
         super.init()
     }
 
@@ -48,9 +45,14 @@ public class PaymentTransactionHandler : NSObject {
         queue.addTransactionObserver(self)
     }
 
-    public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, message: String? = nil) {
-        if isSuccess {
+    public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, canFinish: Bool, message: String? = nil) {
+        print("transaction(\(transaction.transactionIdentifier)): ")
+
+        if canFinish {
             SKPaymentQueue.defaultQueue().finishTransaction(transaction)
+        }
+
+        if isSuccess {
             if transaction.transactionState == SKPaymentTransactionState.Restored, let restore = self.onRestored {
                 restore(transaction, message)
             }
@@ -66,8 +68,6 @@ public class PaymentTransactionHandler : NSObject {
                 fail(transaction, message)
             }
         }
-
-        self.willFinish = true
     }
 }
 
@@ -85,19 +85,19 @@ extension PaymentTransactionHandler : SKPaymentTransactionObserver {
                     // FIXME: レシートが無いのはおかしい
                 }
                 else {
-                    self.finish(transaction: transaction, isSuccess: true, message: "no_verifying")
+                    self.finish(transaction: transaction, isSuccess: true, canFinish: true, message: "no_verifying")
                 }
             case .Failed:
-                self.finish(transaction: transaction, isSuccess: false)
+                self.finish(transaction: transaction, isSuccess: false, canFinish: true)
             case .Purchasing:
                 break
             default:
                 break
             }
         }
+    }
 
-        if self.willFinish {
-            queue.removeTransactionObserver(self)
-        }
+    public func paymentQueue(queue: SKPaymentQueue!, removedTransactions transactions: [AnyObject]!) {
+        queue.removeTransactionObserver(self)
     }
 }

@@ -16,6 +16,15 @@ class ViewController: UIViewController {
     private let invalidProductId = "com.mihyaeru.Aurum.item.invalid"
 
     private let aurum = Aurum.sharedInstance
+    private var verifySuccess = true {
+        didSet {
+            let str = self.verifySuccess ? "Success" : "Failure"
+            self.verifyToggleButton.setTitle("Verify: " + str, forState: UIControlState.Normal)
+            self.verifyToggleButton.setTitle("Verify: " + str, forState: UIControlState.Highlighted)
+        }
+    }
+
+    @IBOutlet weak var verifyToggleButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,9 +35,8 @@ class ViewController: UIViewController {
         self.aurum.onTimeout  = { println("timeout") }
         self.aurum.onSuccess  = { println("success") }
         self.aurum.verify = { (transactionHandler, transaction, receipt) in
-            println("verify for transaction: \(transaction)")
-            // make success!
-            transactionHandler.finish(transaction: transaction, isSuccess: true)
+            println("verify for transaction: \(transaction) will \(self.verifySuccess)")
+            transactionHandler.finish(transaction: transaction, isSuccess: self.verifySuccess, canFinish: self.verifySuccess)
         }
     }
 
@@ -46,6 +54,10 @@ class ViewController: UIViewController {
 
     @IBAction func fix() {
         self.aurum.fix()
+    }
+
+    @IBAction func toggleVerifySuccess() {
+        self.verifySuccess = !self.verifySuccess
     }
 }
 
