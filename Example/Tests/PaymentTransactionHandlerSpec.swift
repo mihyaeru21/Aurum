@@ -37,13 +37,6 @@ class PaymentTransactionHandlerSpec: QuickSpec {
         let handler = PaymentTransactionHandler()
 
         describe("purchase") {
-            it ("calls SKPaymentQueue#addTransactionObserver") {
-                var called = 0
-                dummyAddObserver = { called++ }
-                handler.purchase(product: SKProduct())
-                expect(called) == 1
-            }
-
             it("calls SKPaymentQueue#addPayment") {
                 var called = 0
                 dummyAddPayment = { called++ }

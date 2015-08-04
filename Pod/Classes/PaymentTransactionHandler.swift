@@ -35,14 +35,12 @@ public class PaymentTransactionHandler : NSObject {
     }
 
     public func purchase(#product: SKProduct) {
-        let queue = SKPaymentQueue.defaultQueue()
-        queue.addTransactionObserver(self)
-        queue.addPayment(SKPayment(product: product))
+        let payment = SKPayment(product: product)
+        SKPaymentQueue.defaultQueue().addPayment(payment)
     }
 
-    public func fix() {
-        let queue = SKPaymentQueue.defaultQueue()
-        queue.addTransactionObserver(self)
+    public func startObserving() {
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
 
     public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, canFinish: Bool, message: String? = nil) {
@@ -95,9 +93,5 @@ extension PaymentTransactionHandler : SKPaymentTransactionObserver {
                 break
             }
         }
-    }
-
-    public func paymentQueue(queue: SKPaymentQueue!, removedTransactions transactions: [AnyObject]!) {
-        queue.removeTransactionObserver(self)
     }
 }

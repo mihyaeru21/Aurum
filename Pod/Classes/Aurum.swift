@@ -11,7 +11,6 @@ import StoreKit
 
 public class Aurum {
     public static let sharedInstance = Aurum()
-    private init() {}
 
     // for error
     public static let ErrorDomain = "com.mihyaeru.Aurum"
@@ -35,55 +34,46 @@ public class Aurum {
     public var onTimeout  : OnTimeoutType?
     public var verify     : PaymentTransactionHandler.VerifyHookType?
 
-    var requestHandler     : ProductsRequestHandler?
-    var transactionHandler : PaymentTransactionHandler?
+    let requestHandler     : ProductsRequestHandler
+    let transactionHandler : PaymentTransactionHandler
+
+    private init() {
+        self.requestHandler     = ProductsRequestHandler()
+        self.transactionHandler = PaymentTransactionHandler()
+        setupHandlers()
+    }
+
+    private func setupHandlers() {
+        self.transactionHandler.onSuccess  = { [weak self] (_, _) in self?.onSuccess?()                                                    }
+        self.transactionHandler.onRestored = { [weak self] (_, _) in self?.onRestored?()                                                   }
+        self.transactionHandler.onFailure  = { [weak self] (transaction, _) in self?.onFailure?(transaction.error)                         }
+        self.transactionHandler.onCanceled = { [weak self] (_, _) in self?.onCanceled?()                                                   }
+        self.transactionHandler.verify     = { [weak self] (handler, transaction, receipt) in self?.verify?(handler, transaction, receipt) }
+
+        self.requestHandler.onStarted = { [weak self] (productIds, request) in self?.onStarted?(productIds, request) }
+        self.requestHandler.onFailure = { [weak self] (error) in self?.onFailure?(error)                             }
+        self.requestHandler.onSuccess = { [weak self] (products, invalidIds) in
+            if (invalidIds.count <= 0) {
+                let product = products[0]  // FIXME: ひとまず1個だけ対応
+                self?.transactionHandler.purchase(product: product)
+            }
+            else {
+                self?.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
+            }
+        }
+    }
 
     public func start(productId: String) {
-        self.transactionHandler = PaymentTransactionHandler(
-            onSuccess:  { [weak self] (_, _) in self?.onSuccess?() },
-            onRestored: { [weak self] (_, _) in self?.onRestored?() },
-            onFailure:  { [weak self] (transaction, _) in self?.onFailure?(transaction.error) },
-            onCanceled: { [weak self] (_, _) in self?.onCanceled?() },
-            verify: self.verify
-        )
-        self.requestHandler = ProductsRequestHandler(
-            onStarted: self.onStarted,
-            onSuccess: { [weak self] (products, invalidIds) in
-                if (invalidIds.count <= 0) {
-                    let product = products[0]  // FIXME: ひとまず1個だけ対応
-                    self?.transactionHandler?.purchase(product: product)
-                }
-                else {
-                    self?.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
-                }
-            },
-            onFailure: { [weak self] error in
-                self?.onFailure?(error)
-            }
-        )
-
         if SKPaymentQueue.canMakePayments() {
-            self.requestHandler?.request(productIds: Set([productId]))
+            self.requestHandler.request(productIds: Set([productId]))
         }
         else {
             self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.CannotMakePayments.rawValue, userInfo:nil))
         }
     }
 
-    public func fix() {
-        self.transactionHandler = PaymentTransactionHandler(
-            onSuccess:  { [weak self] (_, _) in self?.onSuccess?() },
-            onRestored: { [weak self] (_, _) in self?.onRestored?() },
-            onFailure:  { [weak self] (transaction, _) in self?.onFailure?(transaction.error) },
-            onCanceled: { [weak self] (_, _) in self?.onCanceled?() },
-            verify: self.verify
-        )
-
-        if SKPaymentQueue.canMakePayments() {
-            self.transactionHandler?.fix()
-        }
-        else {
-            self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.CannotMakePayments.rawValue, userInfo:nil))
-        }
+    // this method shoud be called during application initialization
+    public func startObserving() {
+        self.transactionHandler.startObserving()
     }
 }

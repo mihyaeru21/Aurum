@@ -52,8 +52,9 @@ class ViewController: UIViewController {
         self.aurum.start(self.invalidProductId)
     }
 
-    @IBAction func fix() {
-        self.aurum.fix()
+    @IBAction func addTransactionObserver(sender: AnyObject) {
+        // in general, this method shoud be called during application initialization
+        self.aurum.startObserving()
     }
 
     @IBAction func toggleVerifySuccess() {
