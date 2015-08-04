@@ -54,16 +54,16 @@ public class PaymentTransactionHandler : NSObject {
             if transaction.transactionState == SKPaymentTransactionState.Restored, let restore = self.onRestored {
                 restore(transaction, message)
             }
-            else if let succeed = self.onSuccess {
-                succeed(transaction, message)
+            else {
+                self.onSuccess?(transaction, message)
             }
         }
         else {
             if transaction.error?.code == SKErrorPaymentCancelled, let cancel = self.onCanceled {
                 cancel(transaction, message)
             }
-            else if let fail = self.onFailure {
-                fail(transaction, message)
+            else {
+                self.onFailure?(transaction, message)
             }
         }
     }

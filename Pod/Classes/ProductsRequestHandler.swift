@@ -38,17 +38,13 @@ public class ProductsRequestHandler : NSObject {
 
 extension ProductsRequestHandler : SKProductsRequestDelegate {
     public func productsRequest(request: SKProductsRequest!, didReceiveResponse response: SKProductsResponse!) {
-        if let onSuccess = self.onSuccess {
-            onSuccess(
-                response.products as! [SKProduct],
-                response.invalidProductIdentifiers as! [SKProduct]
-            )
-        }
+        self.onSuccess?(
+            response.products as! [SKProduct],
+            response.invalidProductIdentifiers as! [SKProduct]
+        )
     }
 
     public func request(request: SKRequest!, didFailWithError error: NSError!) {
-        if let onFailure = self.onFailure {
-            onFailure(error)
-        }
+        self.onFailure?(error)
     }
 }
