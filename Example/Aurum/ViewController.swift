@@ -36,6 +36,11 @@ class ViewController: UIViewController {
             println("verify for transaction: \(transaction) will \(self.verifySuccess)")
             transactionHandler.finish(transaction: transaction, isSuccess: self.verifySuccess, canFinish: self.verifySuccess)
         }
+        self.aurum.onSuccess = { transaction, _ in
+            if let product = self.aurum.getProductFromCache(transaction.payment.productIdentifier) {
+                println("success: id: \(product.productIdentifier), price: \(product.price), locale: \(product.priceLocale)")
+            }
+        }
     }
 
     @IBAction func buyValidItem1() {

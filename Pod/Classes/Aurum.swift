@@ -35,6 +35,8 @@ public class Aurum {
     let requestHandler     : ProductsRequestHandler
     let transactionHandler : PaymentTransactionHandler
 
+    private var productCache: [String: SKProduct] = [:]
+
     private init() {
         self.requestHandler     = ProductsRequestHandler()
         self.transactionHandler = PaymentTransactionHandler()
@@ -51,7 +53,8 @@ public class Aurum {
         self.requestHandler.onStarted = { (productIds, request) in self.onStarted?(productIds, request) }
         self.requestHandler.onFailure = { (error) in self.onFailure?(nil, error, nil)                   }
         self.requestHandler.onSuccess = { (products) in
-            let product = products[0]  // FIXME: ひとまず1個だけ対応
+            let product: SKProduct = products[0]  // FIXME: ひとまず1個だけ対応
+            self.productCache[product.productIdentifier] = product
             self.transactionHandler.purchase(product: product)
         }
     }
@@ -68,5 +71,9 @@ public class Aurum {
     // this method shoud be called during application initialization
     public func startObserving() {
         self.transactionHandler.startObserving()
+    }
+
+    public func getProductFromCache(productId: String) -> SKProduct? {
+        return self.productCache[productId]
     }
 }
