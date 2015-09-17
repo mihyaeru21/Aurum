@@ -24,14 +24,12 @@ public class Aurum {
     public typealias OnRestoredType = PaymentTransactionHandler.TransactionHookType
     public typealias OnCanceledType = PaymentTransactionHandler.TransactionHookType
     public typealias OnFailureType  = (SKPaymentTransaction?, NSError?, NSString?) -> ()   // transaction.error may be nil when transaction.state was Failed
-    public typealias OnTimeoutType  = () -> ()
 
     public var onStarted  : OnStartedType?
     public var onSuccess  : OnSuccessType?
     public var onRestored : OnRestoredType?
     public var onFailure  : OnFailureType?
     public var onCanceled : OnCanceledType?
-    public var onTimeout  : OnTimeoutType?
     public var verify     : PaymentTransactionHandler.VerifyHookType?
 
     let requestHandler     : ProductsRequestHandler
