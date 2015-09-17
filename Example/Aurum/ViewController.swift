@@ -30,10 +30,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         self.aurum.onStarted  = { (_, _) in println("start") }
-        self.aurum.onFailure  = { error in println("failure with error: \(error)") }
-        self.aurum.onCanceled = { println("cancel") }
+        self.aurum.onFailure  = { _, error, _ in println("failure with error: \(error)") }
+        self.aurum.onCanceled = { _, _ in println("cancel") }
         self.aurum.onTimeout  = { println("timeout") }
-        self.aurum.onSuccess  = { println("success") }
+        self.aurum.onSuccess  = { _, _ in println("success") }
         self.aurum.verify = { (transactionHandler, transaction, receipt) in
             println("verify for transaction: \(transaction) will \(self.verifySuccess)")
             transactionHandler.finish(transaction: transaction, isSuccess: self.verifySuccess, canFinish: self.verifySuccess)
