@@ -17,8 +17,8 @@ extension SKProductsRequest {
 }
 
 class DummyResponse: SKProductsResponse {
-    override var products : [AnyObject]! { get { return [] } }
-    override var invalidProductIdentifiers : [AnyObject]! { get{ return [] } }
+    override var products : [SKProduct] { get { return [] } }
+    override var invalidProductIdentifiers : [String] { get{ return [] } }
 
     override init() {
         super.init()
@@ -59,7 +59,7 @@ class ProductsRequestHandlerSpec: QuickSpec {
             it("calls onFailure callback") {
                 var called = 0
                 handler.onFailure = { _ in called++ }
-                handler.request(SKProductsRequest(productIdentifiers: Set([])), didFailWithError: NSError())
+                handler.request(SKProductsRequest(productIdentifiers: Set([])), didFailWithError: NSError(domain: Aurum.ErrorDomain, code: Aurum.Error.InvalidProductId.rawValue, userInfo: [:] as [NSObject: AnyObject]))
                 expect(called) == 1
             }
         }

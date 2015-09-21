@@ -29,16 +29,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.aurum.onStarted  = { (_, _) in println("start") }
-        self.aurum.onFailure  = { _, error, _ in println("failure with error: \(error)") }
-        self.aurum.onCanceled = { _, _ in println("cancel") }
+        self.aurum.onStarted  = { (_, _) in print("start") }
+        self.aurum.onFailure  = { _, error, _ in print("failure with error: \(error)") }
+        self.aurum.onCanceled = { _, _ in print("cancel") }
         self.aurum.verify = { (transactionHandler, transaction, receipt) in
-            println("verify for transaction: \(transaction) will \(self.verifySuccess)")
+            print("verify for transaction: \(transaction) will \(self.verifySuccess)")
             transactionHandler.finish(transaction: transaction, isSuccess: self.verifySuccess, canFinish: self.verifySuccess)
         }
         self.aurum.onSuccess = { transaction, _ in
             if let product = self.aurum.getProductFromCache(transaction.payment.productIdentifier) {
-                println("success: id: \(product.productIdentifier), price: \(product.price), locale: \(product.priceLocale)")
+                print("success: id: \(product.productIdentifier), price: \(product.price), locale: \(product.priceLocale)")
             }
         }
     }
