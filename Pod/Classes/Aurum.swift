@@ -20,22 +20,22 @@ public class Aurum {
     }
 
     public typealias OnStartedType  = ProductsRequestHandler.OnStartedType
-    public typealias OnSuccessType  = () -> ()
-    public typealias OnRestoredType = () -> ()
-    public typealias OnFailureType  = (NSError?) -> ()
-    public typealias OnCanceledType = () -> ()
-    public typealias OnTimeoutType  = () -> ()
+    public typealias OnSuccessType  = PaymentTransactionHandler.TransactionHookType
+    public typealias OnRestoredType = PaymentTransactionHandler.TransactionHookType
+    public typealias OnCanceledType = PaymentTransactionHandler.TransactionHookType
+    public typealias OnFailureType  = (SKPaymentTransaction?, NSError?, NSString?) -> ()   // transaction.error may be nil when transaction.state was Failed
 
     public var onStarted  : OnStartedType?
     public var onSuccess  : OnSuccessType?
     public var onRestored : OnRestoredType?
     public var onFailure  : OnFailureType?
     public var onCanceled : OnCanceledType?
-    public var onTimeout  : OnTimeoutType?
     public var verify     : PaymentTransactionHandler.VerifyHookType?
 
     let requestHandler     : ProductsRequestHandler
     let transactionHandler : PaymentTransactionHandler
+
+    private var productCache: [String: SKProduct] = [:]
 
     private init() {
         self.requestHandler     = ProductsRequestHandler()
@@ -44,17 +44,18 @@ public class Aurum {
     }
 
     private func setupHandlers() {
-        self.transactionHandler.onSuccess  = { [weak self] (_, _) in self?.onSuccess?()                                                    }
-        self.transactionHandler.onRestored = { [weak self] (_, _) in self?.onRestored?()                                                   }
-        self.transactionHandler.onFailure  = { [weak self] (transaction, _) in self?.onFailure?(transaction.error)                         }
-        self.transactionHandler.onCanceled = { [weak self] (_, _) in self?.onCanceled?()                                                   }
-        self.transactionHandler.verify     = { [weak self] (handler, transaction, receipt) in self?.verify?(handler, transaction, receipt) }
+        self.transactionHandler.onSuccess  = { self.onSuccess?($0, $1)  }
+        self.transactionHandler.onRestored = { self.onRestored?($0, $1) }
+        self.transactionHandler.onCanceled = { self.onCanceled?($0, $1) }
+        self.transactionHandler.verify     = { self.verify?($0, $1, $2) }
+        self.transactionHandler.onFailure  = { transaction, message in self.onFailure?(transaction, transaction.error, message) }
 
-        self.requestHandler.onStarted = { [weak self] (productIds, request) in self?.onStarted?(productIds, request) }
-        self.requestHandler.onFailure = { [weak self] (error) in self?.onFailure?(error)                             }
-        self.requestHandler.onSuccess = { [weak self] (products) in
-            let product = products[0]  // FIXME: ひとまず1個だけ対応
-            self?.transactionHandler.purchase(product: product)
+        self.requestHandler.onStarted = { (productIds, request) in self.onStarted?(productIds, request) }
+        self.requestHandler.onFailure = { (error) in self.onFailure?(nil, error, nil)                   }
+        self.requestHandler.onSuccess = { (products) in
+            let product: SKProduct = products[0]  // FIXME: ひとまず1個だけ対応
+            self.productCache[product.productIdentifier] = product
+            self.transactionHandler.purchase(product: product)
         }
     }
 
@@ -63,12 +64,16 @@ public class Aurum {
             self.requestHandler.request(productIds: Set([productId]))
         }
         else {
-            self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Error.CannotMakePayments.rawValue, userInfo:nil))
+            self.onFailure?(nil, NSError(domain: Aurum.ErrorDomain, code: Error.CannotMakePayments.rawValue, userInfo:nil), nil)
         }
     }
 
     // this method shoud be called during application initialization
     public func startObserving() {
         self.transactionHandler.startObserving()
+    }
+
+    public func getProductFromCache(productId: String) -> SKProduct? {
+        return self.productCache[productId]
     }
 }
