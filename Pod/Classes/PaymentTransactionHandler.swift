@@ -44,8 +44,6 @@ public class PaymentTransactionHandler : NSObject {
     }
 
     public func finish(transaction transaction: SKPaymentTransaction, isSuccess: Bool, canFinish: Bool, message: String? = nil) {
-        print("transaction(\(transaction.transactionIdentifier)): ", terminator: "")
-
         if canFinish {
             SKPaymentQueue.defaultQueue().finishTransaction(transaction)
         }
