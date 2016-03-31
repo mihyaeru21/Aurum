@@ -1,34 +1,32 @@
 PODS:
   - Aurum (0.0.1)
-  - Nimble (2.0.0-rc.3)
-  - Quick (0.6.0)
+  - Nimble (3.2.0)
+  - Quick (0.9.1)
 
 DEPENDENCIES:
   - Aurum (from `../`)
-  - Nimble (from `https://github.com/Quick/Nimble.git`, branch `swift-2.0`)
-  - Quick (from `https://github.com/Quick/Quick.git`, branch `swift-2.0`)
+  - Nimble (from `https://github.com/Quick/Nimble.git`)
+  - Quick (from `https://github.com/Quick/Quick.git`)
 
 EXTERNAL SOURCES:
   Aurum:
     :path: "../"
   Nimble:
-    :branch: swift-2.0
     :git: https://github.com/Quick/Nimble.git
   Quick:
-    :branch: swift-2.0
     :git: https://github.com/Quick/Quick.git
 
 CHECKOUT OPTIONS:
   Nimble:
-    :commit: a87c41424b2b8bc7821cf9e0352f87f53daf5263
+    :commit: 918ce7db50c532cdaa6f0cc79c438f612d82b444
     :git: https://github.com/Quick/Nimble.git
   Quick:
-    :commit: 93408cc119d5b8a65a26ef0382f5790dd5d7dc01
+    :commit: 3a1d88fb81476001c62f086dbd94bb0f5354f1a3
     :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
   Aurum: edf4839e5b34e8e3f23875458754756844355281
-  Nimble: 2f64d173ad23dc39f10110840a1ed15f29ef75e8
-  Quick: aaa961333f0bec39bfefa4b759128e4eb39f0d0e
+  Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
+  Quick: a5221fc21788b6aeda934805e68b061839bc3165
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0
