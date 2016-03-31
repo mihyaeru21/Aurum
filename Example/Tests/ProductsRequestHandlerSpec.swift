@@ -33,14 +33,14 @@ class ProductsRequestHandlerSpec: QuickSpec {
         describe("request") {
             it ("calls SKProcuctsRequest#start") {
                 var called = 0
-                dummyStart = { called++ }
+                dummyStart = { called += 1 }
                 handler.request(productIds: Set(["hoge_id"]))
                 expect(called) == 1
             }
 
             it("calls onStarted callback") {
                 var called = 0
-                handler.onStarted = { (_, _) in called++ }
+                handler.onStarted = { (_, _) in called += 1 }
                 handler.request(productIds: Set(["hoge_id"]))
                 expect(called) == 1
             }
@@ -49,7 +49,7 @@ class ProductsRequestHandlerSpec: QuickSpec {
         describe("productsRequest:didReceiveResponse:") {
             it("calls onSuccess callback") {
                 var called = 0
-                handler.onSuccess = { _ in called++ }
+                handler.onSuccess = { _ in called += 1 }
                 handler.productsRequest(SKProductsRequest(productIdentifiers: Set([])), didReceiveResponse: DummyResponse())
                 expect(called) == 1
             }
@@ -58,7 +58,7 @@ class ProductsRequestHandlerSpec: QuickSpec {
         describe("request:didFailWithError:") {
             it("calls onFailure callback") {
                 var called = 0
-                handler.onFailure = { _ in called++ }
+                handler.onFailure = { _ in called += 1 }
                 handler.request(SKProductsRequest(productIdentifiers: Set([])), didFailWithError: NSError(domain: Aurum.ErrorDomain, code: Aurum.Error.InvalidProductId.rawValue, userInfo: [:] as [NSObject: AnyObject]))
                 expect(called) == 1
             }
