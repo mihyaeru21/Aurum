@@ -34,7 +34,7 @@ public class PaymentTransactionHandler : NSObject {
         super.init()
     }
 
-    public func purchase(#product: SKProduct) {
+    public func purchase(product product: SKProduct) {
         let payment = SKPayment(product: product)
         SKPaymentQueue.defaultQueue().addPayment(payment)
     }
@@ -43,7 +43,7 @@ public class PaymentTransactionHandler : NSObject {
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
 
-    public func finish(#transaction: SKPaymentTransaction, isSuccess: Bool, canFinish: Bool, message: String? = nil) {
+    public func finish(transaction transaction: SKPaymentTransaction, isSuccess: Bool, canFinish: Bool, message: String? = nil) {
         if canFinish {
             SKPaymentQueue.defaultQueue().finishTransaction(transaction)
         }
@@ -68,14 +68,14 @@ public class PaymentTransactionHandler : NSObject {
 }
 
 extension PaymentTransactionHandler : SKPaymentTransactionObserver {
-    public func paymentQueue(queue: SKPaymentQueue!, updatedTransactions transactions: [AnyObject]!) {
-        for transaction in transactions as! [SKPaymentTransaction] {
+    public func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
             switch transaction.transactionState {
             case .Restored: fallthrough
             case .Purchased:
                 if let verify = self.verify {
                     if let url = NSBundle.mainBundle().appStoreReceiptURL, let receiptData = NSData.init(contentsOfURL: url) {
-                       let receipt = receiptData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.init(0))
+                       let receipt = receiptData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.init(rawValue: 0))
                         verify(self, transaction, receipt)
                     }
                     // FIXME: レシートが無いのはおかしい

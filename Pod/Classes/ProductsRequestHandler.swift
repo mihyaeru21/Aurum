@@ -28,7 +28,7 @@ public class ProductsRequestHandler : NSObject {
         super.init()
     }
 
-    public func request(#productIds: Set<String>) {
+    public func request(productIds productIds: Set<String>) {
         let request = SKProductsRequest(productIdentifiers: productIds)
         request.delegate = self
         request.start()
@@ -37,17 +37,17 @@ public class ProductsRequestHandler : NSObject {
 }
 
 extension ProductsRequestHandler : SKProductsRequestDelegate {
-    public func productsRequest(request: SKProductsRequest!, didReceiveResponse response: SKProductsResponse!) {
-        let invalidIds = response.invalidProductIdentifiers as! [SKProduct]
+    public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+        let invalidIds = response.invalidProductIdentifiers
         if (invalidIds.count > 0) {
             self.onFailure?(NSError(domain: Aurum.ErrorDomain, code: Aurum.Error.InvalidProductId.rawValue, userInfo:["invalidIds": invalidIds]))
         }
         else {
-            self.onSuccess?(response.products as! [SKProduct])
+            self.onSuccess?(response.products )
         }
     }
 
-    public func request(request: SKRequest!, didFailWithError error: NSError!) {
+    public func request(request: SKRequest, didFailWithError error: NSError) {
         self.onFailure?(error)
     }
 }

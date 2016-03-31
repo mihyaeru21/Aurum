@@ -16,17 +16,17 @@ private var dummyRemoveObserver : () -> () = {}
 private var dummyAddPayment     : () -> () = {}
 private var dummyFinish         : () -> () = {}
 class DummyQueue : SKPaymentQueue {
-    override func addTransactionObserver(observer: SKPaymentTransactionObserver!) { dummyAddObserver() }
-    override func removeTransactionObserver(observer: SKPaymentTransactionObserver!) { dummyRemoveObserver() }
-    override func addPayment(payment: SKPayment!) { dummyAddPayment() }
-    override func finishTransaction(transaction: SKPaymentTransaction!) { dummyFinish() }
+    override func addTransactionObserver(observer: SKPaymentTransactionObserver) { dummyAddObserver() }
+    override func removeTransactionObserver(observer: SKPaymentTransactionObserver) { dummyRemoveObserver() }
+    override func addPayment(payment: SKPayment) { dummyAddPayment() }
+    override func finishTransaction(transaction: SKPaymentTransaction) { dummyFinish() }
 }
 
 class DummyTransaction: SKPaymentTransaction {
     var state : SKPaymentTransactionState?
     override var transactionState : SKPaymentTransactionState { get { return self.state! } }
     var e : NSError?
-    override var error : NSError { get { return self.e! } }
+    override var error : NSError? { get { return self.e! } }
 }
 
 
