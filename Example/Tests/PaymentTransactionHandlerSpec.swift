@@ -29,7 +29,6 @@ class DummyTransaction: SKPaymentTransaction {
     override var error : NSError? { get { return self.e! } }
 }
 
-
 class PaymentTransactionHandlerSpec: QuickSpec {
     override func spec() {
         // singletonは、overrideして先にインスタンスを作っちゃえばsuperに勝てる
@@ -39,7 +38,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
         describe("purchase") {
             it("calls SKPaymentQueue#addPayment") {
                 var called = 0
-                dummyAddPayment = { called++ }
+                dummyAddPayment = { called += 1 }
                 handler.purchase(product: SKProduct())
                 expect(called) == 1
             }
@@ -52,7 +51,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls SKPaymentQueue#finish") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Purchased
-                    dummyFinish = { called++ }
+                    dummyFinish = { called += 1 }
                     handler.finish(transaction: transaction, isSuccess: true, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -60,7 +59,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls onRestored if state is restored and handler has onRestored") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Restored
-                    handler.onRestored = { (_, _) in called++ }
+                    handler.onRestored = { (_, _) in called += 1 }
                     handler.finish(transaction: transaction, isSuccess: true, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -69,7 +68,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Restored
                     handler.onRestored = nil
-                    handler.onSuccess  = { (_, _) in called++ }
+                    handler.onSuccess  = { (_, _) in called += 1 }
                     handler.finish(transaction: transaction, isSuccess: true, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -77,7 +76,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls onSuccess if state isn't restored") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Purchased
-                    handler.onSuccess  = { (_, _) in called++ }
+                    handler.onSuccess  = { (_, _) in called += 1 }
                     handler.finish(transaction: transaction, isSuccess: true, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -87,8 +86,8 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("doesn't call SKPaymentQueue#finish if canFinish is also false") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Failed
-                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentInvalid, userInfo: nil)
-                    dummyFinish = { called++ }
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorCode.PaymentInvalid.rawValue, userInfo: nil)
+                    dummyFinish = { called += 1 }
                     handler.finish(transaction: transaction, isSuccess: false, canFinish: false, message: nil)
                     expect(called) == 0
                 }
@@ -96,8 +95,8 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls SKPaymentQueue#finish if canFinish is true") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Failed
-                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentInvalid, userInfo: nil)
-                    dummyFinish = { called++ }
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorCode.PaymentInvalid.rawValue, userInfo: nil)
+                    dummyFinish = { called += 1 }
                     handler.finish(transaction: transaction, isSuccess: false, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -105,8 +104,8 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls onCanceled if error code is canceled and handler has onCanceled") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Failed
-                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentCancelled, userInfo: nil)
-                    handler.onCanceled = { (_, _) in called++ }
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorCode.PaymentCancelled.rawValue, userInfo: nil)
+                    handler.onCanceled = { (_, _) in called += 1 }
                     handler.finish(transaction: transaction, isSuccess: false, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -114,9 +113,9 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls onFailure if error code is canceled and handler doesn't have onCanceled") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Failed
-                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentCancelled, userInfo: nil)
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorCode.PaymentCancelled.rawValue, userInfo: nil)
                     handler.onCanceled = nil
-                    handler.onFailure  = { (_, _) in called++ }
+                    handler.onFailure  = { (_, _) in called += 1 }
                     handler.finish(transaction: transaction, isSuccess: false, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -124,8 +123,8 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls onFailure if error code isn't canceled") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Failed
-                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentInvalid, userInfo: nil)
-                    handler.onFailure  = { (_, _) in called++ }
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorCode.PaymentInvalid.rawValue, userInfo: nil)
+                    handler.onFailure  = { (_, _) in called += 1 }
                     handler.finish(transaction: transaction, isSuccess: false, canFinish: true, message: nil)
                     expect(called) == 1
                 }
@@ -139,7 +138,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls finish with success") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Restored
-                    handler.onRestored = { (_, _) in called++ }
+                    handler.onRestored = { (_, _) in called += 1 }
                     handler.paymentQueue(DummyQueue.defaultQueue(), updatedTransactions: [transaction])
                     expect(called) == 1
                 }
@@ -150,7 +149,7 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Purchased
                     handler.onRestored = nil
-                    handler.onSuccess  = { (_, _) in called++ }
+                    handler.onSuccess  = { (_, _) in called += 1 }
                     handler.paymentQueue(DummyQueue.defaultQueue(), updatedTransactions: [transaction])
                     expect(called) == 1
                 }
@@ -160,8 +159,8 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("calls finish with false") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Failed
-                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorPaymentInvalid, userInfo: nil)
-                    handler.onFailure = { (_, _) in called++ }
+                    transaction.e     = NSError(domain: SKErrorDomain, code: SKErrorCode.PaymentInvalid.rawValue, userInfo: nil)
+                    handler.onFailure = { (_, _) in called += 1 }
                     handler.paymentQueue(DummyQueue.defaultQueue(), updatedTransactions: [transaction])
                     expect(called) == 1
                 }
@@ -171,8 +170,8 @@ class PaymentTransactionHandlerSpec: QuickSpec {
                 it("doesn't call finish") {
                     var called = 0
                     transaction.state = SKPaymentTransactionState.Purchasing
-                    handler.onSuccess = { (_, _) in called++ }
-                    handler.onFailure = { (_, _) in called++ }
+                    handler.onSuccess = { (_, _) in called += 1 }
+                    handler.onFailure = { (_, _) in called += 1 }
                     handler.paymentQueue(DummyQueue.defaultQueue(), updatedTransactions: [transaction])
                     expect(called) == 0
                 }
